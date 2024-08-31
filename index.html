@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora</title>
     <style>
-        .calculator {
+        .calculadora {
             width: 200px;
             margin: 0 auto;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .display {
+        .pantalla {
             width: 100%;
             height: 40px;
             margin-bottom: 10px;
@@ -22,12 +22,12 @@
             border-radius: 5px;
             font-size: 1.5em;
         }
-        .buttons {
+        .botones {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
         }
-        .button {
+        .boton {
             width: 100%;
             height: 50px;
             font-size: 1.2em;
@@ -36,98 +36,128 @@
             background-color: #f9f9f9;
             cursor: pointer;
         }
-        .button.operator {
+        .boton.operador {
             background-color: #f1c40f;
         }
-        .button.operator:hover {
+        .boton.operador:hover {
             background-color: #f39c12;
         }
-        .button:hover {
+        .boton:hover {
             background-color: #e0e0e0;
+        }
+        .boton.convertir {
+            grid-column: span 4; /* Ocupa toda la fila */
+            height: 60px; /* Aumenta la altura */
+            font-size: 1.4em; /* Aumenta el tamaño de la fuente */
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <div id="display" class="display"></div>
-        <div class="buttons">
-            <button class="button" onclick="appendNumber('7')">7</button>
-            <button class="button" onclick="appendNumber('8')">8</button>
-            <button class="button" onclick="appendNumber('9')">9</button>
-            <button class="button operator" onclick="setOperator('/')">/</button>
+    <div class="calculadora">
+        <div id="pantalla" class="pantalla"></div>
+        <div class="botones">
+            <button class="boton" onclick="agregarNumero('7')">7</button>
+            <button class="boton" onclick="agregarNumero('8')">8</button>
+            <button class="boton" onclick="agregarNumero('9')">9</button>
+            <button class="boton operador" onclick="establecerOperador('/')">/</button>
             
-            <button class="button" onclick="appendNumber('4')">4</button>
-            <button class="button" onclick="appendNumber('5')">5</button>
-            <button class="button" onclick="appendNumber('6')">6</button>
-            <button class="button operator" onclick="setOperator('*')">*</button>
+            <button class="boton" onclick="agregarNumero('4')">4</button>
+            <button class="boton" onclick="agregarNumero('5')">5</button>
+            <button class="boton" onclick="agregarNumero('6')">6</button>
+            <button class="boton operador" onclick="establecerOperador('*')">*</button>
             
-            <button class="button" onclick="appendNumber('1')">1</button>
-            <button class="button" onclick="appendNumber('2')">2</button>
-            <button class="button" onclick="appendNumber('3')">3</button>
-            <button class="button operator" onclick="setOperator('-')">-</button>
+            <button class="boton" onclick="agregarNumero('1')">1</button>
+            <button class="boton" onclick="agregarNumero('2')">2</button>
+            <button class="boton" onclick="agregarNumero('3')">3</button>
+            <button class="boton operador" onclick="establecerOperador('-')">-</button>
             
-            <button class="button" onclick="appendNumber('0')">0</button>
-            <button class="button" onclick="clearDisplay()">C</button>
-            <button class="button operator" onclick="calculateResult()">=</button>
-            <button class="button operator" onclick="setOperator('+')">+</button>
+            <button class="boton" onclick="agregarNumero('0')">0</button>
+            <button class="boton" onclick="limpiarPantalla()">C</button>
+            <button class="boton operador" onclick="calcularResultado()">=</button>
+            <button class="boton operador" onclick="establecerOperador('+')">+</button>
+            <button class="boton convertir" onclick="convertirAFahrenheit()">C° a F°</button>
         </div>
     </div>
 
     <script>
-        let currentInput = '';
-        let operator = '';
-        let firstOperand = '';
+        let entradaActual = '';
+        let operador = '';
+        let primerOperando = '';
 
-        function appendNumber(number) {
-            currentInput += number;
-            updateDisplay();
-        }
-
-        function setOperator(op) {
-            if (currentInput === '') return;
-            if (operator) {
-                // Calculate the result if there's already an operator
-                calculateResult();
+        function agregarNumero(numero) {
+            if (operador && entradaActual) {
+                entradaActual += numero;
+            } else {
+                entradaActual = (entradaActual === '0' ? numero : entradaActual + numero);
             }
-            firstOperand = currentInput;
-            operator = op;
-            currentInput = '';
-            updateDisplay();
+            actualizarPantalla();
         }
 
-        function calculateResult() {
-            if (currentInput === '' || firstOperand === '' || operator === '') return;
-            const secondOperand = currentInput;
-            let result;
-            switch (operator) {
-                case '+':
-                    result = parseFloat(firstOperand) + parseFloat(secondOperand);
-                    break;
-                case '-':
-                    result = parseFloat(firstOperand) - parseFloat(secondOperand);
-                    break;
-                case '*':
-                    result = parseFloat(firstOperand) * parseFloat(secondOperand);
-                    break;
-                case '/':
-                    result = parseFloat(firstOperand) / parseFloat(secondOperand);
-                    break;
+        function establecerOperador(op) {
+            if (entradaActual === '' && op === '-') {
+                entradaActual = '-';
+                actualizarPantalla();
+                return;
             }
-            currentInput = result;
-            operator = '';
-            firstOperand = '';
-            updateDisplay();
+            if (entradaActual === '' || operador) return;
+            primerOperando = entradaActual;
+            operador = op;
+            entradaActual = '';
+            actualizarPantalla();
         }
 
-        function clearDisplay() {
-            currentInput = '';
-            operator = '';
-            firstOperand = '';
-            updateDisplay();
+        function calcularResultado() {
+            if (entradaActual === '' || primerOperando === '' || operador === '') return;
+            const segundoOperando = entradaActual;
+            let resultado;
+            try {
+                switch (operador) {
+                    case '+':
+                        resultado = parseFloat(primerOperando) + parseFloat(segundoOperando);
+                        break;
+                    case '-':
+                        resultado = parseFloat(primerOperando) - parseFloat(segundoOperando);
+                        break;
+                    case '*':
+                        resultado = parseFloat(primerOperando) * parseFloat(segundoOperando);
+                        break;
+                    case '/':
+                        if (segundoOperando === '0') {
+                            resultado = 'Error';
+                        } else {
+                            resultado = parseFloat(primerOperando) / parseFloat(segundoOperando);
+                        }
+                        break;
+                }
+                if (resultado !== 'Error') {
+                    resultado = resultado.toFixed(2); // Limitar a 2 decimales
+                }
+            } catch {
+                resultado = 'Error';
+            }
+            entradaActual = resultado;
+            operador = '';
+            primerOperando = '';
+            actualizarPantalla();
         }
 
-        function updateDisplay() {
-            document.getElementById('display').textContent = `${firstOperand} ${operator} ${currentInput}`;
+        function limpiarPantalla() {
+            entradaActual = '';
+            operador = '';
+            primerOperando = '';
+            actualizarPantalla();
+        }
+
+        function convertirAFahrenheit() {
+            if (entradaActual === '') return;
+            const celsius = parseFloat(entradaActual);
+            const fahrenheit = (celsius * 9/5) + 32;
+            entradaActual = fahrenheit.toFixed(2); // Limitar a 2 decimales
+            actualizarPantalla();
+        }
+
+        function actualizarPantalla() {
+            document.getElementById('pantalla').textContent = `${primerOperando} ${operador} ${entradaActual}`;
         }
     </script>
 </body>

@@ -76,6 +76,7 @@
             <button class="boton operador" onclick="calcularResultado()">=</button>
             <button class="boton operador" onclick="establecerOperador('+')">+</button>
             <button class="boton convertir" onclick="convertirAFahrenheit()">C° a F°</button>
+            <button class="boton convertir" onclick="convertirAGramos()">P</button>
         </div>
     </div>
 
@@ -153,6 +154,14 @@
             const celsius = parseFloat(entradaActual);
             const fahrenheit = (celsius * 9/5) + 32;
             entradaActual = fahrenheit.toFixed(2); // Limitar a 2 decimales
+            actualizarPantalla();
+        }
+
+        function convertirAGramos() {
+            if (entradaActual === '') return;
+            const gramos = parseFloat(entradaActual);
+            const kilogramos = gramos / 1000;
+            entradaActual = kilogramos.toFixed(2); // Limitar a 2 decimales
             actualizarPantalla();
         }
 

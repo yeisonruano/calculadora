@@ -72,12 +72,14 @@
             <button class="boton operador" onclick="establecerOperador('-')">-</button>
             
             <button class="boton" onclick="agregarNumero('0')">0</button>
+            <button class="boton" onclick="agregarNumero('.')">.</button>
             <button class="boton" onclick="limpiarPantalla()">C</button>
             <button class="boton operador" onclick="calcularResultado()">=</button>
             <button class="boton operador" onclick="establecerOperador('+')">+</button>
             <button class="boton convertir" onclick="convertirAFahrenheit()">C° a F°</button>
             <button class="boton convertir" onclick="convertirAGramos()">P</button>
             <button class="boton convertir" onclick="convertirAPsi()">PR</button>
+            <button class="boton convertir" onclick="convertirADolares()">M</button>
         </div>
     </div>
 
@@ -171,6 +173,16 @@
             const bar = parseFloat(entradaActual);
             const psi = bar * 14.5038;
             entradaActual = psi.toFixed(2); // Limitar a 2 decimales
+            actualizarPantalla();
+        }
+
+        function convertirADolares() {
+            if (entradaActual === '') return;
+            const pesos = parseFloat(entradaActual);
+            // Aquí puedes cambiar el valor según la tasa de cambio actual
+            const tasaDeCambio = 0.21; // Ejemplo: 1 peso = 0.21 dólares
+            const dolares = pesos * tasaDeCambio;
+            entradaActual = dolares.toFixed(2); // Limitar a 2 decimales
             actualizarPantalla();
         }
 

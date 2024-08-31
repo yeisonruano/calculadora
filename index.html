@@ -77,6 +77,7 @@
             <button class="boton operador" onclick="establecerOperador('+')">+</button>
             <button class="boton convertir" onclick="convertirAFahrenheit()">C° a F°</button>
             <button class="boton convertir" onclick="convertirAGramos()">P</button>
+            <button class="boton convertir" onclick="convertirAPsi()">PR</button>
         </div>
     </div>
 
@@ -162,6 +163,14 @@
             const gramos = parseFloat(entradaActual);
             const kilogramos = gramos / 1000;
             entradaActual = kilogramos.toFixed(2); // Limitar a 2 decimales
+            actualizarPantalla();
+        }
+
+        function convertirAPsi() {
+            if (entradaActual === '') return;
+            const bar = parseFloat(entradaActual);
+            const psi = bar * 14.5038;
+            entradaActual = psi.toFixed(2); // Limitar a 2 decimales
             actualizarPantalla();
         }
 
